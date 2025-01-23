@@ -20,9 +20,9 @@
         }
     }
 
-    botOptions.JWTUrl = "PLEASE_ENTER_JWTURL_HERE";
-    botOptions.userIdentity = 'PLEASE_ENTER_USER_EMAIL_ID';// Provide users email id here
-    botOptions.botInfo = { name: "PLEASE_ENTER_BOT_NAME", "_id": "PLEASE_ENTER_BOT_ID" }; // bot name is case sensitive
+    botOptions.JWTUrl = `*****`;
+    botOptions.userIdentity = '*****';// Provide users email id here
+    botOptions.botInfo = { name: "*****", "_id": "*****" }; // bot name is case sensitive
 
     /* 
     Important Note: These keys are provided here for quick demos to generate JWT token at client side but not for Production environment.
@@ -53,16 +53,17 @@
         allowIframe: false, 			// set true, opens authentication links in popup window, default value is "false"
         isSendButton: false, 			// set true, to show send button below the compose bar
         isTTSEnabled: true,			// set true, to show speaker icon
-        ttsInterface: 'webapi',          // webapi or awspolly or azure , where default is webapi
+        // ttsInterface:'webapi',          // webapi or awspolly , where default is webapi
+        ttsInterface:'azure',          // webapi or awspolly , where default is webapi
         isSpeechEnabled: true,			// set true, to show mic icon
-        azureTTS: {                    // uncomments respective files in index.html
-            subscriptionKey: '',       // Azure subscription key
-            region: 'eastus'           // preferred Azure region
+        azureTTS: {
+            key: '*******',
+            region: 'eastus'
         },
         stt:{
-            vendor: 'webapi',           //'webapi'|'azure'|'google' //uses respective settings from the following keys and uncomments respective files in index.html
+            vendor: 'azure',           //'webapi'|'azure'|'google' //uses respective settings from the following keys and uncomments respective files in index.html
             azure:{
-                subscriptionKey: '',
+                subscriptionKey: '*****',
                 recognitionLanguage: 'en-US',
                 recognitionMode: 'Interactive' //Interactive/Dictation/Conversation/Interactive
             },
