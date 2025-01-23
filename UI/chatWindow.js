@@ -1905,7 +1905,8 @@
                             if(me.config.ttsInterface && me.config.ttsInterface ==="webapi"){
                                 var synth = window.speechSynthesis;
                                 synth.pause();
-                             }else if (me.config.ttsInterface === 'awspolly') {
+                             }
+                             else if (me.config.ttsInterface === 'awspolly') {
                                 if (me.isTTSOn ===false) {
                                     // isTTSOn = false;
                                     gainNode.gain.value = 0; // 10 %
@@ -1918,7 +1919,11 @@
                             if(me.config.ttsInterface && me.config.ttsInterface==="webapi"){
                                 _ttsConnection = me.speakWithWebAPI();
  
-                            }else if(me.config.ttsInterface &&me.config.ttsInterface === 'awspolly'){
+                            }else if(me.config.ttsInterface && me.config.ttsInterface==="azure"){
+                                _ttsConnection = me.speakWithAzure();
+ 
+                            }
+                            else if(me.config.ttsInterface &&me.config.ttsInterface === 'awspolly'){
                                 gainNode.gain.value = 1
                             }else{
                                 _ttsConnection = createSocketForTTS();
@@ -3097,16 +3102,17 @@
                     }
                     if (me.config.ttsInterface&&me.config.ttsInterface==="webapi") {
                         _ttsConnection = me.speakWithWebAPI(_txtToSpeak);
-                    }else if(me.config.ttsInterface && me.config.ttsInterface==="awspolly"){
+                    }else if (me.config.ttsInterface === 'azure') {
+                        me.speakWithAzure(_txtToSpeak)
+                     }
+                    else if(me.config.ttsInterface && me.config.ttsInterface==="awspolly"){
                         if(!window.speakTextWithAWSPolly){
                             console.warn("Please uncomment amazon polly files 'plugins/aws-sdk-2.668.0.min.js' and'plugins/kore-aws-polly.js' in index.html");
                         }else{
                             speakTextWithAWSPolly(_txtToSpeak);
                         }
 
-                    } else if (me.config.ttsInterface === 'azure') {
-                        me.speakWithAzure(_txtToSpeak);
-                    } else if (!_ttsConnection || (_ttsConnection.readyState && _ttsConnection.readyState !== 1)) {
+                    }else if (!_ttsConnection || (_ttsConnection.readyState && _ttsConnection.readyState !== 1)) {
                         try {
                             _ttsConnection = createSocketForTTS();
                         } catch (e) {
@@ -4546,11 +4552,14 @@
 
             function getSIDToken() {      
                 if(chatInitialize.config.stt.vendor === 'azure'){
-                    if (recognizer != null) {
-                        RecognizerStop(SDK, recognizer);
-                    }
-                    recognizer = RecognizerSetup(SDK, chatInitialize.config.stt.azure.recognitionMode, chatInitialize.config.stt.azure.recognitionLanguage, 0, chatInitialize.config.stt.azure.subscriptionKey);
-                    RecognizerStart(SDK, recognizer);
+                    // if (recognizer != null) {
+                    //     RecognizerStop(SDK, recognizer);
+                    // }
+                    // recognizer = RecognizerSetup(SDK, chatInitialize.config.stt.azure.recognitionMode, chatInitialize.config.stt.azure.recognitionLanguage, 0, chatInitialize.config.stt.azure.subscriptionKey);
+                    // RecognizerStart(SDK, recognizer);
+                    $('.recordingMicrophone').css('display', 'block');
+                    $('.notRecordingMicrophone').css('display', 'none');
+                    window.recognizeSpeechWithAzure()
                 } else if(chatInitialize.config.stt.vendor === 'google'){
                     // using google cloud speech API
                     micEnable();
@@ -4853,6 +4862,7 @@
                 if (me.config.isTTSEnabled) {
                     if(me.config.ttsInterface && me.config.ttsInterface==="webapi"){
                         if('speechSynthesis' in window){
+
                             audioMsgs = [];
                             audioPlaying = false;
                             window.speechSynthesis.cancel();
@@ -4887,6 +4897,7 @@
                     console.warn("Please provide tts socket url");
                     return false;
                 }
+                console.log(ttsServerUrl,"tts")
                 window.TTS_SOCKET_URL = ttsServerUrl;
                 var serv_url = window.TTS_SOCKET_URL;
                 var userEmail = userIdentity;
